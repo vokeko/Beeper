@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Beeper
 {
@@ -64,7 +65,7 @@ namespace Beeper
         E4=330,
         F4=349,
         Gb4=370,
-        G4=192,
+        G4=392,
         Ab4=415,
         A4=440,
         Hb4=466,
@@ -119,6 +120,15 @@ namespace Beeper
         H8=7902,
     }
 
+    public enum Delka
+    {
+        Cela = 1600,
+        Pulka = Cela / 2,
+        Ctvrtina = Pulka / 2,
+        Osmina = Ctvrtina / 2,
+        Sestnactina = Osmina / 2,
+    }
+
     public static class Menu
     {
         public static bool Nabidka(string[] polozky)
@@ -170,9 +180,7 @@ namespace Beeper
             switch(polozka)
             {
                 case "Nová písnička":
-                    Console.Clear();
-                    Console.WriteLine("Funkce není naimplentována");
-                    Console.ReadKey();
+                    PisnickaWindow.ZobrazPisnicku(null);
                     return false;
                 case "Import":
                     Console.Clear();
@@ -182,14 +190,14 @@ namespace Beeper
                 case "Hrát písničku":
                     Console.Clear();
                     Console.WriteLine("Hraju :)");
-                    Console.Beep((int)Ton.C4, 300);
-                    Console.Beep((int)Ton.D4, 300);
-                    Console.Beep((int)Ton.E4, 300);
-                    Console.Beep((int)Ton.F4, 300);
-                    Console.Beep((int)Ton.G4, 300);
-                    Console.Beep((int)Ton.A4, 300);
-                    Console.Beep((int)Ton.H4, 300);
-                    Console.Beep((int)Ton.C5, 300);
+                    Console.Beep((int)Ton.C4, (int)Delka.Ctvrtina);
+                    Console.Beep((int)Ton.D4, (int)Delka.Ctvrtina);
+                    Console.Beep((int)Ton.E4, (int)Delka.Ctvrtina);
+                    Console.Beep((int)Ton.F4, (int)Delka.Ctvrtina);
+                    Console.Beep((int)Ton.G4, (int)Delka.Ctvrtina);
+                    Console.Beep((int)Ton.A4, (int)Delka.Ctvrtina);
+                    Console.Beep((int)Ton.H4, (int)Delka.Ctvrtina);
+                    Console.Beep((int)Ton.C5, (int)Delka.Ctvrtina);
                     break;
                 case "Info":
                     Console.Clear();
@@ -198,14 +206,20 @@ namespace Beeper
                     Console.WriteLine("Import - nahrajte rozpracovanou melodii ke zpracování");
                     Console.WriteLine("Přehrát písničku - přehraje hotovou písničku");
                     Console.WriteLine("");
-                    //Console.WriteLine("Režim vytváření:");
+                    Console.WriteLine("Režim vytváření:");
                     //Console.WriteLine("V režimu vytváření vyberte pozici šipkami nebo WASD.");
                     //Console.WriteLine("Přidejte notu s enter");
                     //Console.WriteLine("Přidejte mezeru s mezerníkem");
                     //Console.WriteLine("Smažte notu nebo mezeru s delete");
                     //Console.WriteLine("Navyšte notu nebo mezeru s + a -.");
                     //Console.WriteLine("Prodlužte notu nebo mezeru s 1 a 2.");
-                    //Console.WriteLine("Klikněte S, O, E, P nebo Q pro respektivní možnosti");
+                    Console.WriteLine("Další možnosti:");
+                    //Console.WriteLine("U pro uložit");
+                    //Console.WriteLine("M pro pokročilé možnosti");
+                    //Console.WriteLine("E pro export");
+                    Console.WriteLine("P pro přehrát");
+                    Console.WriteLine("O pro odejít");
+
                     Console.ReadKey();
                     return false;
                 case "Odejít":
@@ -217,32 +231,108 @@ namespace Beeper
 
     public static class PisnickaWindow
     {
-        public static void ZobrazPisnicku()
+        public static void ZobrazPisnicku(PisenInfo pisen)
         {
-            VykresliPisnicku();
-            var key = Console.ReadKey();
+            ConsoleKeyInfo key;
+            if (pisen == null) pisen = new PisenInfo();
+
+            do
+            {
+                VykresliPisnicku(pisen);
+                key = Console.ReadKey();
+                //if (key.Key == ConsoleKey.U) 
+                //if (key.Key == ConsoleKey.M) 
+                //if (key.Key == ConsoleKey.E) 
+                if (key.Key == ConsoleKey.P) PrehrajPisnicku(pisen);
+            }
+            while (key.Key != ConsoleKey.O);
         }
 
-        private static void VykresliPisnicku()
+        private static void VykresliPisnicku(PisenInfo pisen)
         {
             Console.Clear();
+            Console.WriteLine("[P]řehrát");
+            Console.WriteLine("[O]dejít");
+        }
+
+        private static void PrehrajPisnicku(PisenInfo pisen)
+        {
+            Console.Clear();
+            Console.WriteLine("Přehrává se");
+            pisen = new PisenInfo();
+            pisen.PridejNotu(Ton.D4, Delka.Ctvrtina, 0);
+            pisen.PridejNotu(Ton.D4, Delka.Ctvrtina, 400);
+            pisen.PridejNotu(Ton.A4, Delka.Ctvrtina, 800);
+            pisen.PridejNotu(Ton.A4, Delka.Ctvrtina, 1200);
+
+            pisen.PridejNotu(Ton.D4, Delka.Osmina, 1600);
+            pisen.PridejNotu(Ton.E4, Delka.Osmina, 1800);
+            pisen.PridejNotu(Ton.F4, Delka.Osmina, 2000);
+            pisen.PridejNotu(Ton.D4, Delka.Osmina, 2200);
+
+            pisen.PridejNotu(Ton.A4, Delka.Ctvrtina, 2400);
+            pisen.PridejNotu(Ton.A4, Delka.Ctvrtina, 2800);
+
+            pisen.PridejNotu(Ton.D4, Delka.Osmina, 3200);
+            pisen.PridejNotu(Ton.E4, Delka.Osmina, 3400);
+            pisen.PridejNotu(Ton.F4, Delka.Osmina, 3600);
+            pisen.PridejNotu(Ton.E4, Delka.Osmina, 3800);
+            pisen.PridejNotu(Ton.D4, Delka.Osmina, 4000);
+            pisen.PridejNotu(Ton.E4, Delka.Osmina, 4200);
+            pisen.PridejNotu(Ton.F4, Delka.Osmina, 4400);
+            pisen.PridejNotu(Ton.D4, Delka.Osmina, 4600);
+            pisen.PridejNotu(Ton.A4, Delka.Pulka, 4800);
+
+            pisen.PridejNotu(Ton.G4, Delka.Ctvrtina, 6400);
+            pisen.PridejNotu(Ton.G4, Delka.Ctvrtina, 6800);
+            pisen.PridejNotu(Ton.Hb4, Delka.Ctvrtina, 7200);
+            pisen.PridejNotu(Ton.Hb4, Delka.Ctvrtina, 7600);
+
+            pisen.Prehraj();
+            Console.ReadKey(); 
         }
     }
-
-    class PisenInfo
+    
+    public class PisenInfo
     {
-        int rychlost;
-        List<Pisen> pisen;
-		PisenInfo()
+        private int rychlost;
+        private List<Nota> noty;
+		public PisenInfo()
         {
             rychlost = 130;
-            pisen = new List<Pisen>();
+            noty = new List<Nota>();
         }
-        class Pisen
+        public void Prehraj()
         {
-            Ton ton;
-            int delka;
-            int pozice;
+            for (int x = 0; x < noty.Count; x++)
+            {
+                Console.Beep(noty[x].ton, noty[x].delka);
+                if (x + 1 < noty.Count)
+                {
+                    int pauza = noty[x + 1].pozice - noty[x].pozice - noty[x].delka;
+                    if (pauza > 0)
+                        Thread.Sleep(pauza);
+                }
+            }
+        }
+        public void PridejNotu(Ton ton, Delka del, int pos)
+        {
+            Nota tempnota = new Nota(ton, del, pos);
+            noty.Add(tempnota);
+        }
+        private class Nota
+        {
+            private Ton _ton;
+            internal int ton { get { return (int)_ton; } }
+            private Delka _delka;
+            internal int delka { get { return (int)_delka; } }
+            internal int pozice { get; }
+            public Nota(Ton _ton, Delka _delka, int pos)
+            {
+                this._ton = _ton;
+                this._delka = _delka;
+                this.pozice = pos;
+            }
         }
     }
 }
