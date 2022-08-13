@@ -12,6 +12,9 @@ namespace Beeper
         static void Main(string[] args)
         {
             Console.Title = "Beeper - pípací skladatel";
+            Console.OutputEncoding = Encoding.UTF8;
+            Console.WindowHeight = 41;
+            Console.WindowWidth = 129;
             string[] polozky = new string[5] { "Nová písnička", "Import", "Hrát písničku", "Info", "Odejít" };
             bool exit = false;
             while (!exit)
@@ -24,70 +27,70 @@ namespace Beeper
 
     public enum Ton
     {
-        D1=37,
+        /*D1=37,
         Eb1=39,
         E1=41,
         F1=44,
         Gb1=46,
         G1=49,
-        Ab1=52,
-        A1=55,
-        H1=58,
-        Hb1=62,
-        C2=65,
-        Db2=70,
-        D2=73,
-        Eb2=78,
-        E2=82,
-        F2=87,
-        Gb2=92,
-        G2=100,
-        Ab2=104,
-        A2=110,
-        Hb2=117,
-        H2=123,
-        C3=131,
-        Db3=139,
-        D3=147,
-        Eb3=156,
-        E3=165,
-        F3=175,
-        Gb3=185,
-        G3=196,
-        Ab3=208,
-        A3=220,
-        Hb3=233,
-        H3=247,
-        C4=262,
-        Db4=277,
-        D4=294,
-        Eb4=311,
-        E4=330,
-        F4=349,
-        Gb4=370,
-        G4=392,
-        Ab4=415,
-        A4=440,
-        Hb4=466,
-        H4=494,
-        C5=523,
-        Db5=554,
-        D5=587,
-        Eb5=622,
-        E5=659,
-        F5=698,
-        Gb5=740,
-        G5=784,
-        Ab5=831,
-        A5=880,
-        Hb5=932,
-        H5=988,
-        C6=1047,
-        Db6=1109,
-        D6=1175,
-        Eb6=1245,
-        E6=1319,    
-        F6=1397,
+        Ab1=52,*/
+        A1 = 55, //A1
+        Hb1 = 58, //A#1
+        H1 = 62, //H1
+        C2 = 65, //C2
+        Db2 = 70, //C#2
+        D2 = 73, //D2
+        Eb2 = 78, //D#2
+        E2 = 82, //E2
+        F2 = 87, //F2
+        Gb2 = 92, //F#2
+        G2 = 100, //G2
+        Ab2 = 104, //G#2
+        A2 = 110, //A2
+        Hb2 = 117, //A#2
+        H2 = 123, //H2
+        C3 = 131, //C3
+        Db3 = 139, //C#3
+        D3 = 147, //D3
+        Eb3 = 156,
+        E3 = 165,
+        F3 = 175,
+        Gb3 = 185,
+        G3 = 196,
+        Ab3 = 208,
+        A3 = 220,
+        Hb3 = 233,
+        H3 = 247,
+        C4 = 262,
+        Db4 = 277,
+        D4 = 294,
+        Eb4 = 311,
+        E4 = 330,
+        F4 = 349,
+        Gb4 = 370,
+        G4 = 392,
+        Ab4 = 415,
+        A4 = 440,
+        Hb4 = 466,
+        H4 = 494,
+        C5 = 523,
+        Db5 = 554,
+        D5 = 587,
+        Eb5 = 622,
+        E5 = 659,
+        F5 = 698,
+        Gb5 = 740,
+        G5 = 784,
+        Ab5 = 831,
+        A5 = 880,
+        Hb5 = 932,
+        H5 = 988,
+        C6 = 1047,
+        Db6 = 1109,
+        D6 = 1175,
+        Eb6 = 1245,
+        E6 = 1319,
+        /*F6=1397,
         Gb6=1480,
         G6=1568,
         Ab6=1661,
@@ -117,7 +120,7 @@ namespace Beeper
         Ab8=6645,
         A8=7040,
         Hb8=7459,
-        H8=7902,
+        H8=7902,*/
     }
 
     public enum Delka
@@ -207,19 +210,11 @@ namespace Beeper
                     Console.WriteLine("Přehrát písničku - přehraje hotovou písničku");
                     Console.WriteLine("");
                     Console.WriteLine("Režim vytváření:");
-                    //Console.WriteLine("V režimu vytváření vyberte pozici šipkami nebo WASD.");
-                    //Console.WriteLine("Přidejte notu s enter");
-                    //Console.WriteLine("Přidejte mezeru s mezerníkem");
-                    //Console.WriteLine("Smažte notu nebo mezeru s delete");
-                    //Console.WriteLine("Navyšte notu nebo mezeru s + a -.");
-                    //Console.WriteLine("Prodlužte notu nebo mezeru s 1 a 2.");
-                    Console.WriteLine("Další možnosti:");
-                    //Console.WriteLine("U pro uložit");
-                    //Console.WriteLine("M pro pokročilé možnosti");
-                    //Console.WriteLine("E pro export");
-                    Console.WriteLine("P pro přehrát");
-                    Console.WriteLine("O pro odejít");
-
+                    Console.WriteLine("V režimu vytváření vyberte pozici šipkami nebo WASD.");
+                    Console.WriteLine("Přidejte notu s enter");
+                    Console.WriteLine("Smažte notu s delete");
+                    Console.WriteLine("Prodlužte nebo zkraťte notu s + a -.");
+                    Console.WriteLine("Pro další možnosti stiskněte respektivní klávesu na obrazovce v režimu vytváření");
                     Console.ReadKey();
                     return false;
                 case "Odejít":
@@ -251,8 +246,50 @@ namespace Beeper
         private static void VykresliPisnicku(PisenInfo pisen)
         {
             Console.Clear();
+            if (Console.WindowHeight < 41) Console.WindowHeight = 41;
+            if (Console.WindowWidth < 129) Console.WindowWidth = 129;
+            Console.WriteLine(" - - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -"); //E6
+            Console.WriteLine("                                |                               |                               |                               ");
+            Console.WriteLine(" - - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -");
+            Console.WriteLine("                                |                               |                               |                               ");
+            Console.WriteLine(" - - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -");
+            Console.WriteLine("                                |                               |                               |                               ");
+            Console.WriteLine("--------------------------------+-------------------------------+-------------------------------+-------------------------------");
+            Console.WriteLine("                                |                               |                               |                               ");
+            Console.WriteLine("--------------------------------+-------------------------------+-------------------------------+-------------------------------");
+            Console.WriteLine("                                |                               |                               |                               ");
+            Console.WriteLine("--------------------------------+-------------------------------+-------------------------------+-------------------------------");
+            Console.WriteLine("                                |                               |                               |                               ");
+            Console.WriteLine("--------------------------------+-------------------------------+-------------------------------+-------------------------------");
+            Console.WriteLine("                                |                               |                               |                               ");
+            Console.WriteLine("--------------------------------+-------------------------------+-------------------------------+-------------------------------");
+            Console.WriteLine("                                |                               |                               |                               ");
+            Console.WriteLine(" - - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -"); //C4
+            Console.WriteLine("                                |                               |                               |                               ");
+            Console.WriteLine("--------------------------------+-------------------------------+-------------------------------+-------------------------------");
+            Console.WriteLine("                                |                               |                               |                               ");
+            Console.WriteLine("--------------------------------+-------------------------------+-------------------------------+-------------------------------");
+            Console.WriteLine("                                |                               |                               |                               ");
+            Console.WriteLine("--------------------------------+-------------------------------+-------------------------------+-------------------------------");
+            Console.WriteLine("                                |                               |                               |                               ");
+            Console.WriteLine("--------------------------------+-------------------------------+-------------------------------+-------------------------------");
+            Console.WriteLine("                                |                               |                               |                               ");
+            Console.WriteLine("--------------------------------+-------------------------------+-------------------------------+-------------------------------");
+            Console.WriteLine("                                |                               |                               |                               ");
+            Console.WriteLine(" - - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -");
+            Console.WriteLine("                                |                               |                               |                               ");
+            Console.WriteLine(" - - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -");
+            Console.WriteLine("                                |                               |                               |                               ");
+            Console.WriteLine(" - - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -"); //A1
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("[P]řehrát");
+            Console.WriteLine("[U]ložit");
+            Console.WriteLine("[E]xport");
+            Console.WriteLine("[M]ožnosti");
             Console.WriteLine("[O]dejít");
+            Console.WriteLine("[R]eset");
         }
 
         private static void PrehrajPisnicku(PisenInfo pisen)
