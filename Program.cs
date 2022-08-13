@@ -192,15 +192,36 @@ namespace Beeper
                     return false;
                 case "Hrát písničku":
                     Console.Clear();
-                    Console.WriteLine("Hraju :)");
-                    Console.Beep((int)Ton.C4, (int)Delka.Ctvrtina);
-                    Console.Beep((int)Ton.D4, (int)Delka.Ctvrtina);
-                    Console.Beep((int)Ton.E4, (int)Delka.Ctvrtina);
-                    Console.Beep((int)Ton.F4, (int)Delka.Ctvrtina);
-                    Console.Beep((int)Ton.G4, (int)Delka.Ctvrtina);
-                    Console.Beep((int)Ton.A4, (int)Delka.Ctvrtina);
-                    Console.Beep((int)Ton.H4, (int)Delka.Ctvrtina);
-                    Console.Beep((int)Ton.C5, (int)Delka.Ctvrtina);
+                    Console.WriteLine("Hraje se písnička ♪");
+                    var pisen = new PisenInfo();
+                    pisen.PridejNotu(Ton.D4, Delka.Ctvrtina, 0);
+                    pisen.PridejNotu(Ton.D4, Delka.Ctvrtina, 400);
+                    pisen.PridejNotu(Ton.A4, Delka.Ctvrtina, 800);
+                    pisen.PridejNotu(Ton.A4, Delka.Ctvrtina, 1200);
+
+                    pisen.PridejNotu(Ton.D4, Delka.Osmina, 1600);
+                    pisen.PridejNotu(Ton.E4, Delka.Osmina, 1800);
+                    pisen.PridejNotu(Ton.F4, Delka.Osmina, 2000);
+                    pisen.PridejNotu(Ton.D4, Delka.Osmina, 2200);
+
+                    pisen.PridejNotu(Ton.A4, Delka.Ctvrtina, 2400);
+                    pisen.PridejNotu(Ton.A4, Delka.Ctvrtina, 2800);
+
+                    pisen.PridejNotu(Ton.D4, Delka.Osmina, 3200);
+                    pisen.PridejNotu(Ton.E4, Delka.Osmina, 3400);
+                    pisen.PridejNotu(Ton.F4, Delka.Osmina, 3600);
+                    pisen.PridejNotu(Ton.E4, Delka.Osmina, 3800);
+                    pisen.PridejNotu(Ton.D4, Delka.Osmina, 4000);
+                    pisen.PridejNotu(Ton.E4, Delka.Osmina, 4200);
+                    pisen.PridejNotu(Ton.F4, Delka.Osmina, 4400);
+                    pisen.PridejNotu(Ton.D4, Delka.Osmina, 4600);
+                    pisen.PridejNotu(Ton.A4, Delka.Pulka, 4800);
+
+                    pisen.PridejNotu(Ton.G4, Delka.Ctvrtina, 6400);
+                    pisen.PridejNotu(Ton.G4, Delka.Ctvrtina, 6800);
+                    pisen.PridejNotu(Ton.Hb4, Delka.Ctvrtina, 7200);
+                    pisen.PridejNotu(Ton.Hb4, Delka.Ctvrtina, 7600);
+                    pisen.Prehraj();
                     break;
                 case "Info":
                     Console.Clear();
@@ -296,57 +317,32 @@ namespace Beeper
         {
             Console.Clear();
             Console.WriteLine("Přehrává se");
-            pisen = new PisenInfo();
-            pisen.PridejNotu(Ton.D4, Delka.Ctvrtina, 0);
-            pisen.PridejNotu(Ton.D4, Delka.Ctvrtina, 400);
-            pisen.PridejNotu(Ton.A4, Delka.Ctvrtina, 800);
-            pisen.PridejNotu(Ton.A4, Delka.Ctvrtina, 1200);
-
-            pisen.PridejNotu(Ton.D4, Delka.Osmina, 1600);
-            pisen.PridejNotu(Ton.E4, Delka.Osmina, 1800);
-            pisen.PridejNotu(Ton.F4, Delka.Osmina, 2000);
-            pisen.PridejNotu(Ton.D4, Delka.Osmina, 2200);
-
-            pisen.PridejNotu(Ton.A4, Delka.Ctvrtina, 2400);
-            pisen.PridejNotu(Ton.A4, Delka.Ctvrtina, 2800);
-
-            pisen.PridejNotu(Ton.D4, Delka.Osmina, 3200);
-            pisen.PridejNotu(Ton.E4, Delka.Osmina, 3400);
-            pisen.PridejNotu(Ton.F4, Delka.Osmina, 3600);
-            pisen.PridejNotu(Ton.E4, Delka.Osmina, 3800);
-            pisen.PridejNotu(Ton.D4, Delka.Osmina, 4000);
-            pisen.PridejNotu(Ton.E4, Delka.Osmina, 4200);
-            pisen.PridejNotu(Ton.F4, Delka.Osmina, 4400);
-            pisen.PridejNotu(Ton.D4, Delka.Osmina, 4600);
-            pisen.PridejNotu(Ton.A4, Delka.Pulka, 4800);
-
-            pisen.PridejNotu(Ton.G4, Delka.Ctvrtina, 6400);
-            pisen.PridejNotu(Ton.G4, Delka.Ctvrtina, 6800);
-            pisen.PridejNotu(Ton.Hb4, Delka.Ctvrtina, 7200);
-            pisen.PridejNotu(Ton.Hb4, Delka.Ctvrtina, 7600);
-
             pisen.Prehraj();
             Console.ReadKey(); 
         }
     }
-    
+
     public class PisenInfo
     {
+        //TO DO: plnění rychlosti a tvůrce
         private int rychlost;
-        private List<Nota> noty;
-		public PisenInfo()
+        private string tvurce;
+        public List<Nota> Noty { get; private set; }
+        public PisenInfo()
         {
             rychlost = 130;
-            noty = new List<Nota>();
+            tvurce = default;
+            Noty = new List<Nota>();
         }
         public void Prehraj()
         {
-            for (int x = 0; x < noty.Count; x++)
+            Noty = Noty.OrderBy(x => x.Pozice).ToList();
+            for (int x = 0; x < Noty.Count; x++)
             {
-                Console.Beep(noty[x].ton, noty[x].delka);
-                if (x + 1 < noty.Count)
+                Console.Beep(Noty[x].Ton, Noty[x].Delka);
+                if (x + 1 < Noty.Count)
                 {
-                    int pauza = noty[x + 1].pozice - noty[x].pozice - noty[x].delka;
+                    int pauza = Noty[x + 1].Pozice - Noty[x].Pozice - Noty[x].Delka;
                     if (pauza > 0)
                         Thread.Sleep(pauza);
                 }
@@ -354,22 +350,41 @@ namespace Beeper
         }
         public void PridejNotu(Ton ton, Delka del, int pos)
         {
+            //pos *= 100;
             Nota tempnota = new Nota(ton, del, pos);
-            noty.Add(tempnota);
+            if (Noty.Contains(tempnota)) return;
+            Noty.Add(tempnota);
         }
-        private class Nota
+        public void PridejNotu(int y, Delka del, int pos)
         {
-            private Ton _ton;
-            internal int ton { get { return (int)_ton; } }
-            private Delka _delka;
-            internal int delka { get { return (int)_delka; } }
-            internal int pozice { get; }
-            public Nota(Ton _ton, Delka _delka, int pos)
-            {
-                this._ton = _ton;
-                this._delka = _delka;
-                this.pozice = pos;
-            }
+            pos *= 100;
+            Nota tempnota = new Nota((Ton)y, del, pos);
+            //to do y na ton
+            if (Noty.Contains(tempnota)) return;
+            Noty.Add(tempnota);
+        }
+        public void OdeberNotu(int x, int y)
+        {
+            x *= 100;
+            Noty.RemoveAll(z => z.Ton == y && z.Pozice == x);
+        }
+        public void VymazPisen()
+        {
+            Noty.Clear();
+        }
+    }
+    public class Nota
+    {
+        private readonly Ton _ton;
+        internal int Ton { get { return (int)_ton; } }
+        private readonly Delka _delka;
+        internal int Delka { get { return (int)_delka; } }
+        internal int Pozice { get; }
+        public Nota(Ton _ton, Delka _delka, int pos)
+        {
+            this._ton = _ton;
+            this._delka = _delka;
+            this.Pozice = pos;
         }
     }
 }
