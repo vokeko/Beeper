@@ -13,7 +13,7 @@ namespace Beeper
         {
             Console.Title = "Beeper - pípací skladatel";
             Console.OutputEncoding = Encoding.UTF8;
-            Console.WindowHeight = 41;
+            Console.WindowHeight = 42;
             Console.WindowWidth = 129;
             string[] polozky = new string[5] { "Nová písnička", "Import", "Hrát písničku", "Info", "Odejít" };
             bool exit = false;
@@ -22,7 +22,6 @@ namespace Beeper
                 exit = Menu.Nabidka(polozky);
             }
         }
-        
     }
 
     public enum Ton
@@ -180,14 +179,14 @@ namespace Beeper
 
         private static bool GetFromNabidka(string polozka)
         {
-            switch(polozka)
+            switch (polozka)
             {
                 case "Nová písnička":
                     PisnickaWindow.ZobrazPisnicku(null);
                     return false;
                 case "Import":
                     Console.Clear();
-                    Console.WriteLine("Funkce není naimplentována");
+                    Console.WriteLine("Funkce není naimplentována"); //TO DO
                     Console.ReadKey();
                     return false;
                 case "Hrát písničku":
@@ -238,6 +237,17 @@ namespace Beeper
                     Console.WriteLine("Pro další možnosti stiskněte respektivní klávesu na obrazovce v režimu vytváření");
                     Console.ReadKey();
                     return false;
+                case "Tvůrce":
+                    Console.Clear();
+                    Console.WriteLine("Zadejte jméno tvůrce:");
+                    string tvurce = Console.ReadLine();
+                    return false;
+                case "Rychlost":
+                    Console.Clear();
+                    Console.WriteLine("Zadejte rychlost:");
+                    string rychlost = Console.ReadLine();
+                    return false;
+                case "Zpět":
                 case "Odejít":
                     return true;
             }
@@ -250,24 +260,87 @@ namespace Beeper
         public static void ZobrazPisnicku(PisenInfo pisen)
         {
             ConsoleKeyInfo key;
+            int xTotal = 0;
+            short xPos = 0;
+            short yPos = 0;
+            Delka delka = Delka.Ctvrtina;
             if (pisen == null) pisen = new PisenInfo();
-
+            
             do
             {
-                VykresliPisnicku(pisen);
+                VykresliPisnicku(pisen, xPos, yPos, xTotal);
                 key = Console.ReadKey();
-                //if (key.Key == ConsoleKey.U) 
-                //if (key.Key == ConsoleKey.M) 
-                //if (key.Key == ConsoleKey.E) 
-                if (key.Key == ConsoleKey.P) PrehrajPisnicku(pisen);
+                switch(key.Key)
+                {
+                    case ConsoleKey.W:
+                    case ConsoleKey.UpArrow:
+                        yPos--;
+                        if (yPos < 0) yPos = 0;
+                        break;
+                    case ConsoleKey.S:
+                    case ConsoleKey.DownArrow:
+                        yPos++;
+                        if (yPos > 32) yPos = 32;
+                        break;
+                    case ConsoleKey.A:
+                    case ConsoleKey.LeftArrow:
+                        xPos -= 2; xTotal -= 2;
+                        if (xPos < 0)
+                        {
+                            if (xTotal <= 0) xPos = 0;
+                            else xPos = 126;
+                        } 
+                        if (xTotal < 0) xTotal = 0;
+                        break;
+                    case ConsoleKey.D:
+                    case ConsoleKey.RightArrow:
+                        xPos += 2; xTotal += 2;
+                        if (xPos >= 128) xPos = 0;
+                        break;
+                    case ConsoleKey.Enter:
+                        pisen.PridejNotu(yPos, delka, xTotal);
+                        break;
+                    case ConsoleKey.Delete:
+                        pisen.OdeberNotu(xTotal, yPos);
+                        break;
+                    case ConsoleKey.Add:
+                        delka = delka.Next();
+                        break;
+                    case ConsoleKey.Subtract:
+                        delka = delka.Prev();
+                        break;
+                    case ConsoleKey.P:
+                        PrehrajPisnicku(pisen);
+                        break;
+                    case ConsoleKey.U:
+                        Console.Clear(); 
+                        Console.WriteLine("Funkce není implementována"); 
+                        Console.ReadKey(); //TO DO
+                        break;
+                    case ConsoleKey.M:
+                        Menu.Nabidka(new string[3] { "Rychlost", "Tvůrce", "Zpět" });
+                        break;
+                    case ConsoleKey.E:
+                        Console.Clear();
+                        Console.WriteLine("Funkce není implementována");
+                        Console.ReadKey(); //TO DO
+                        break;
+                    case ConsoleKey.R:
+                        Console.Clear();
+                        Console.WriteLine("Opravdu chcete vymazat celou písničku?!?");
+                        Console.WriteLine("[A]no/[N]e");
+                        var x = Console.ReadKey();
+                        if (x.Key == ConsoleKey.A) pisen.VymazPisen();
+                        break;
+                }
             }
-            while (key.Key != ConsoleKey.O);
+            while (key.Key != ConsoleKey.Z);
         }
 
-        private static void VykresliPisnicku(PisenInfo pisen)
+        private static void VykresliPisnicku(PisenInfo pisen, short x, short y, int totalX)
         {
             Console.Clear();
-            if (Console.WindowHeight < 41) Console.WindowHeight = 41;
+            if (Console.WindowHeight < 42) Console.WindowHeight = 42;
             if (Console.WindowWidth < 129) Console.WindowWidth = 129;
             Console.WriteLine(" - - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -"); //E6
             Console.WriteLine("                                |                               |                               |                               ");
@@ -311,6 +384,23 @@ namespace Beeper
             Console.WriteLine("[M]ožnosti");
             Console.WriteLine("[O]dejít");
             Console.WriteLine("[R]eset");
+
+            //Naplnění existujícími notami
+            //var noticky = pisen.Noty.Where(z => Math.Floor((double)z.Delka / 12800) == Math.Floor((double)totalX / 128));
+            foreach (Nota nota in pisen.Noty)
+            {
+                //TO DO: Vykreslování pro jen ty noty, které jsou zrovna na obrazovce, ne všechny
+                //if (nota.Pozice) continue;
+                //TO DO: nefunguje při překročení
+                //TO DO: označení pro dlouhé noty
+                Console.SetCursorPosition(nota.Pozice / 100, nota.Ton);
+                Console.Write("#♪");
+            }
+
+            Console.SetCursorPosition(x, y);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("#♪");
+            Console.ResetColor();
         }
 
         private static void PrehrajPisnicku(PisenInfo pisen)
@@ -318,17 +408,18 @@ namespace Beeper
             Console.Clear();
             Console.WriteLine("Přehrává se");
             pisen.Prehraj();
-            Console.ReadKey(); 
+            Console.WriteLine("Hotovo!");
+            Console.ReadKey();
         }
     }
-
+    
     public class PisenInfo
     {
         //TO DO: plnění rychlosti a tvůrce
         private int rychlost;
         private string tvurce;
         public List<Nota> Noty { get; private set; }
-        public PisenInfo()
+		public PisenInfo()
         {
             rychlost = 130;
             tvurce = default;
