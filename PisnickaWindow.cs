@@ -144,7 +144,8 @@ namespace Beeper
                 //if (nota.Pozice) continue;
                 //TO DO: nefunguje při překročení
                 //TO DO: označení pro dlouhé noty
-                Console.SetCursorPosition(nota.Pozice / 100, nota.Ton);
+                KeyValuePair<float, Ton> ton = pisen.YNaTon.First(z => z.Value == (Ton)nota.Ton);
+                Console.SetCursorPosition(nota.Pozice / 100, (int)ton.Key);
                 Console.Write("#♪");
             }
 
