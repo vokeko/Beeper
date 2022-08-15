@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Beeper
 {
     public static class Menu
     {
-        public static bool Nabidka(string[] polozky)
+        public static bool Nabidka(string[] polozky, PisenInfo pisen)
         {
             int zvolenaPolozka = 0;
             bool vyberdokoncen = false;
@@ -49,10 +45,10 @@ namespace Beeper
                         break;
                 }
             }
-            return GetFromNabidka(polozky[zvolenaPolozka]);
+            return GetFromNabidka(polozky[zvolenaPolozka], pisen);
         }
 
-        private static bool GetFromNabidka(string polozka)
+        private static bool GetFromNabidka(string polozka, PisenInfo savedPisen)
         {
             switch (polozka)
             {
@@ -67,7 +63,9 @@ namespace Beeper
                 case "Hrát písničku":
                     Console.Clear();
                     Console.WriteLine("Hraje se písnička ♪");
-                    var pisen = new PisenInfo();
+                    PisenInfo pisen = new PisenInfo();
+                    pisen.nazev = "Babička Mary";
+                    pisen.tvurce = "Jiří Voskovec";
                     pisen.PridejNotu(Ton.D4, Delka.Ctvrtina, 0);
                     pisen.PridejNotu(Ton.D4, Delka.Ctvrtina, 400);
                     pisen.PridejNotu(Ton.A4, Delka.Ctvrtina, 800);
@@ -93,8 +91,8 @@ namespace Beeper
 
                     pisen.PridejNotu(Ton.G4, Delka.Ctvrtina, 6400);
                     pisen.PridejNotu(Ton.G4, Delka.Ctvrtina, 6800);
-                    pisen.PridejNotu(Ton.Hb4, Delka.Ctvrtina, 7200);
-                    pisen.PridejNotu(Ton.Hb4, Delka.Ctvrtina, 7600);
+                    pisen.PridejNotu(Ton.Asharp4, Delka.Ctvrtina, 7200);
+                    pisen.PridejNotu(Ton.Asharp4, Delka.Ctvrtina, 7600);
                     pisen.Prehraj();
                     break;
                 case "Info":
@@ -109,18 +107,24 @@ namespace Beeper
                     Console.WriteLine("Přidejte notu s enter");
                     Console.WriteLine("Smažte notu s delete");
                     Console.WriteLine("Prodlužte nebo zkraťte notu s + a -.");
+                    Console.WriteLine("Přidejte křížek s X.");
                     Console.WriteLine("Pro další možnosti stiskněte respektivní klávesu na obrazovce v režimu vytváření");
                     Console.ReadKey();
                     return false;
                 case "Tvůrce":
                     Console.Clear();
                     Console.WriteLine("Zadejte jméno tvůrce:");
-                    string tvurce = Console.ReadLine();
+                    savedPisen.tvurce = Console.ReadLine();
                     return false;
                 case "Rychlost":
                     Console.Clear();
                     Console.WriteLine("Zadejte rychlost:");
-                    string rychlost = Console.ReadLine();
+                    savedPisen.rychlost = int.Parse(Console.ReadLine());
+                    return false;
+                case "Název":
+                    Console.Clear();
+                    Console.WriteLine("Zadejte název písničky:");
+                    savedPisen.nazev = Console.ReadLine();
                     return false;
                 case "Zpět":
                 case "Odejít":

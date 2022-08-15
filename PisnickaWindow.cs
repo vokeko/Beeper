@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Beeper
 {
@@ -15,11 +13,12 @@ namespace Beeper
             short xPos = 0;
             short yPos = 0;
             Delka delka = Delka.Ctvrtina;
+            bool krizek = false;
             if (pisen == null) pisen = new PisenInfo();
 
             do
             {
-                VykresliPisnicku(pisen, xPos, yPos, xTotal);
+                VykresliPisnicku(pisen, xPos, yPos, xTotal, krizek);
                 key = Console.ReadKey();
                 switch (key.Key)
                 {
@@ -49,10 +48,13 @@ namespace Beeper
                         if (xPos >= 128) xPos = 0;
                         break;
                     case ConsoleKey.Enter:
-                        pisen.PridejNotu(yPos, delka, xTotal);
+                        pisen.PridejNotu(yPos, delka, xTotal, krizek);
                         break;
                     case ConsoleKey.Delete:
                         pisen.OdeberNotu(xTotal, yPos);
+                        break;
+                    case ConsoleKey.X:
+                        krizek = !krizek;
                         break;
                     case ConsoleKey.Add:
                         delka = delka.Next();
@@ -69,7 +71,7 @@ namespace Beeper
                         Console.ReadKey(); //TO DO
                         break;
                     case ConsoleKey.M:
-                        Menu.Nabidka(new string[3] { "Rychlost", "Tvůrce", "Zpět" });
+                        Menu.Nabidka(new string[4] { "Rychlost", "Tvůrce", "Název", "Zpět" }, pisen);
                         break;
                     case ConsoleKey.E:
                         Console.Clear();
@@ -81,14 +83,17 @@ namespace Beeper
                         Console.WriteLine("Opravdu chcete vymazat celou písničku?!?");
                         Console.WriteLine("[A]no/[N]e");
                         var x = Console.ReadKey();
-                        if (x.Key == ConsoleKey.A) pisen.VymazPisen();
+                        if (x.Key == ConsoleKey.A || x.Key == ConsoleKey.Enter) pisen.VymazPisen();
+                        break;
+                    case ConsoleKey.Escape:
+                        Environment.Exit(0);
                         break;
                 }
             }
             while (key.Key != ConsoleKey.Z);
         }
 
-        private static void VykresliPisnicku(PisenInfo pisen, short x, short y, int totalX)
+        private static void VykresliPisnicku(PisenInfo pisen, short x, short y, int totalX, bool krizek)
         {
             Console.Clear();
             if (Console.WindowHeight < 42) Console.WindowHeight = 42;
@@ -136,29 +141,26 @@ namespace Beeper
             Console.WriteLine("[Z]pět");
             Console.WriteLine("[R]eset");
 
-            //Naplnění existujícími notami
-            //var noticky = pisen.Noty.Where(z => Math.Floor((double)z.Delka / 12800) == Math.Floor((double)totalX / 128));
-            foreach (Nota nota in pisen.Noty)
+            IEnumerable<Nota> viditelneNoty = pisen.Noty.Where(z => Math.Floor((double)z.Pozice / 12800) == Math.Floor((double)totalX / 128));
+            foreach (Nota nota in viditelneNoty)
             {
-                //TO DO: Vykreslování pro jen ty noty, které jsou zrovna na obrazovce, ne všechny
-                //if (nota.Pozice) continue;
-                //TO DO: nefunguje při překročení
                 //TO DO: označení pro dlouhé noty
                 KeyValuePair<float, Ton> ton = pisen.YNaTon.First(z => z.Value == (Ton)nota.Ton);
-                Console.SetCursorPosition(nota.Pozice / 100, (int)ton.Key);
-                Console.Write("#♪");
+                bool celaNota = ton.Key % 1 == 0;
+                Console.SetCursorPosition(nota.Pozice / 100 % 128 + (celaNota ? 1 : 0), (int)Math.Ceiling(ton.Key));
+                Console.Write("{0}♪", celaNota ? "" : "#");
             }
 
-            Console.SetCursorPosition(x, y);
+            Console.SetCursorPosition(x + (krizek ? 0 : 1), y);
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("#♪");
+            Console.Write("{0}♪", krizek ? "#" : "");
             Console.ResetColor();
         }
 
         private static void PrehrajPisnicku(PisenInfo pisen)
         {
             Console.Clear();
-            Console.WriteLine("Přehrává se");
+            Console.WriteLine("Přehrává se ♪");
             pisen.Prehraj();
             Console.WriteLine("Hotovo!");
             Console.ReadKey();

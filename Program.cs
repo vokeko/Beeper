@@ -5,7 +5,7 @@ namespace Beeper
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             Console.Title = "Beeper - pípací skladatel";
             Console.OutputEncoding = Encoding.UTF8;
@@ -15,7 +15,7 @@ namespace Beeper
             bool exit = false;
             while (!exit)
             {
-                exit = Menu.Nabidka(polozky);
+                exit = Menu.Nabidka(polozky, new PisenInfo());
             }
         }
     }
@@ -30,60 +30,60 @@ namespace Beeper
         G1=49,
         Ab1=52,*/
         A1 = 55, //A1
-        Hb1 = 58, //A#1
+        Asharp1 = 58, //A#1
         H1 = 62, //H1
         C2 = 65, //C2
-        Db2 = 70, //C#2
+        Csharp2 = 70, //C#2
         D2 = 73, //D2
-        Eb2 = 78, //D#2
+        Dsharp2 = 78, //D#2
         E2 = 82, //E2
         F2 = 87, //F2
-        Gb2 = 92, //F#2
+        Fsharp2 = 92, //F#2
         G2 = 100, //G2
-        Ab2 = 104, //G#2
+        Gsharp2 = 104, //G#2
         A2 = 110, //A2
-        Hb2 = 117, //A#2
+        Asharp2 = 117, //A#2
         H2 = 123, //H2
         C3 = 131, //C3
-        Db3 = 139, //C#3
+        Csharp3 = 139, //C#3
         D3 = 147, //D3
-        Eb3 = 156,
+        Dsharp3 = 156,
         E3 = 165,
         F3 = 175,
-        Gb3 = 185,
+        Fsharp3 = 185,
         G3 = 196,
-        Ab3 = 208,
+        Gsharp3 = 208,
         A3 = 220,
-        Hb3 = 233,
+        Asharp3 = 233,
         H3 = 247,
         C4 = 262,
-        Db4 = 277,
+        Csharp4 = 277,
         D4 = 294,
-        Eb4 = 311,
+        Dsharp4 = 311,
         E4 = 330,
         F4 = 349,
-        Gb4 = 370,
+        Fsharp4 = 370,
         G4 = 392,
-        Ab4 = 415,
+        Gsharp4 = 415,
         A4 = 440,
-        Hb4 = 466,
+        Asharp4 = 466,
         H4 = 494,
         C5 = 523,
-        Db5 = 554,
+        Csharp5 = 554,
         D5 = 587,
-        Eb5 = 622,
+        Dsharp5 = 622,
         E5 = 659,
         F5 = 698,
-        Gb5 = 740,
+        Fsharp5 = 740,
         G5 = 784,
-        Ab5 = 831,
+        Gsharp5 = 831,
         A5 = 880,
-        Hb5 = 932,
+        Asharp5 = 932,
         H5 = 988,
         C6 = 1047,
-        Db6 = 1109,
+        Csharp6 = 1109,
         D6 = 1175,
-        Eb6 = 1245,
+        Dsharp6 = 1245,
         E6 = 1319,
         /*F6=1397,
         Gb6=1480,
@@ -120,6 +120,8 @@ namespace Beeper
 
     public enum Delka
     {
+        //150 > 1600
+        //100>2400
         Cela = 1600,
         Pulka = Cela / 2,
         Ctvrtina = Pulka / 2,
