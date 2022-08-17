@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Beeper
 {
+    [Serializable]
     public class PisenInfo
     {
         public int rychlost { private get; set; }
@@ -70,6 +73,23 @@ namespace Beeper
         public void VymazPisen()
         {
             Noty.Clear();
+        }
+        public bool Uloz()
+        {
+
+            try
+            {
+                using (Stream stream = File.Open(Extensions.SaveFile(), FileMode.Create))
+                {
+                    BinaryFormatter bin = new BinaryFormatter();
+                    bin.Serialize(stream, this);
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

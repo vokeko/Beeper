@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace Beeper
 {
@@ -19,6 +20,35 @@ namespace Beeper
             T[] Arr = (T[])Enum.GetValues(src.GetType());
             int j = Array.IndexOf<T>(Arr, src) - 1;
             return (j == -1) ? Arr[0] : Arr[j];
+        }
+        public static string GetFile()
+        {
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                dialog.FileName = "pisen";
+                dialog.DefaultExt = ".bin";
+                dialog.Filter = "Binární soubor (*.bin)|*.bin";
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    return dialog.FileName;
+                }
+                else return null;
+            }
+        }
+
+        public static string SaveFile()
+        {
+            using (SaveFileDialog dialog = new SaveFileDialog())
+            {
+                dialog.FileName = "pisen";
+                dialog.DefaultExt = ".bin";
+                dialog.Filter = "Binární soubor (*.bin)|*.bin";
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    return dialog.FileName;
+                }
+                else return null;
+            }
         }
     }
 }

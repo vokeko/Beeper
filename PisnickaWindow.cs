@@ -67,8 +67,10 @@ namespace Beeper
                         break;
                     case ConsoleKey.U:
                         Console.Clear();
-                        Console.WriteLine("Funkce není implementována");
-                        Console.ReadKey(); //TO DO
+                        Console.WriteLine("Ukládá se");
+                        pisen.Uloz();
+                        Console.WriteLine("Hotovo!");
+                        Console.ReadKey();
                         break;
                     case ConsoleKey.M:
                         Menu.Nabidka(new string[4] { "Rychlost", "Tvůrce", "Název", "Zpět" }, pisen);

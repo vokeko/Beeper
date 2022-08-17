@@ -1,5 +1,8 @@
-﻿namespace Beeper
+﻿using System;
+
+namespace Beeper
 {
+    [Serializable]
     public class Nota
     {
         private readonly Ton _ton;

@@ -5,7 +5,7 @@ namespace Beeper
 {
     internal class Program
     {
-        static void Main()
+        [STAThread] static void Main()
         {
             Console.Title = "Beeper - pípací skladatel";
             Console.OutputEncoding = Encoding.UTF8;

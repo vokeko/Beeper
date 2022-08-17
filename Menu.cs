@@ -57,6 +57,35 @@ namespace Beeper
                 case "Nová písnička":
                     PisnickaWindow.ZobrazPisnicku(null);
                     return false;
+                case "Nahrát":
+                    Console.Clear();
+                    try
+                    {
+                        string filePath = Extensions.GetFile();
+                        using (Stream stream = File.Open(filePath , FileMode.Open))
+                        {
+                            BinaryFormatter bin = new BinaryFormatter();
+
+                            {
+                                object deseri = bin.Deserialize(stream);
+
+                                switch (deseri)
+                                {
+                                    case PisenInfo pis:
+                                        PisnickaWindow.ZobrazPisnicku(pis);
+                                        break;
+                                    default:
+                                        Console.WriteLine("Nesprávný formát!");
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Nesprávný formát!");
+                    }
+                    return false;
                 case "Hrát písničku":
                     Console.Clear();
                     Console.WriteLine("Hraje se písnička ♪");
