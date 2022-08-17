@@ -9,9 +9,9 @@ namespace Beeper
         {
             Console.Title = "Beeper - pípací skladatel";
             Console.OutputEncoding = Encoding.UTF8;
-            Console.WindowHeight = 42;
+            Console.WindowHeight = 43;
             Console.WindowWidth = 129;
-            string[] polozky = new string[5] { "Nová písnička", "Import", "Hrát písničku", "Info", "Odejít" };
+            string[] polozky = new string[5] { "Nová písnička", "Nahrát", "Hrát písničku", "Info", "Odejít" };
             bool exit = false;
             while (!exit)
             {
@@ -122,10 +122,10 @@ namespace Beeper
     {
         //150 > 1600
         //100>2400
-        Cela = 1600,
-        Pulka = Cela / 2,
-        Ctvrtina = Pulka / 2,
-        Osmina = Ctvrtina / 2,
-        Sestnactina = Osmina / 2,
+        Celá = 2400,
+        Půlka = Celá / 2,
+        Čtvrtina = Půlka / 2,
+        Osmina = Čtvrtina / 2,
+        Šestnáctina = Osmina / 2,
     }
 }

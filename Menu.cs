@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Beeper
 {
@@ -55,29 +57,26 @@ namespace Beeper
                 case "Nová písnička":
                     PisnickaWindow.ZobrazPisnicku(null);
                     return false;
-                case "Import":
-                    Console.Clear();
-                    Console.WriteLine("Funkce není naimplentována"); //TO DO
-                    Console.ReadKey();
-                    return false;
                 case "Hrát písničku":
                     Console.Clear();
                     Console.WriteLine("Hraje se písnička ♪");
-                    PisenInfo pisen = new PisenInfo();
-                    pisen.nazev = "Babička Mary";
-                    pisen.tvurce = "Jiří Voskovec";
-                    pisen.PridejNotu(Ton.D4, Delka.Ctvrtina, 0);
-                    pisen.PridejNotu(Ton.D4, Delka.Ctvrtina, 400);
-                    pisen.PridejNotu(Ton.A4, Delka.Ctvrtina, 800);
-                    pisen.PridejNotu(Ton.A4, Delka.Ctvrtina, 1200);
+                    PisenInfo pisen = new PisenInfo() 
+                    {
+                        nazev = "Babička Mary",
+                        tvurce = "Jiří Voskovec", 
+                    };
+                    pisen.PridejNotu(Ton.D4, Delka.Čtvrtina, 0);
+                    pisen.PridejNotu(Ton.D4, Delka.Čtvrtina, 400);
+                    pisen.PridejNotu(Ton.A4, Delka.Čtvrtina, 800);
+                    pisen.PridejNotu(Ton.A4, Delka.Čtvrtina, 1200);
 
                     pisen.PridejNotu(Ton.D4, Delka.Osmina, 1600);
                     pisen.PridejNotu(Ton.E4, Delka.Osmina, 1800);
                     pisen.PridejNotu(Ton.F4, Delka.Osmina, 2000);
                     pisen.PridejNotu(Ton.D4, Delka.Osmina, 2200);
 
-                    pisen.PridejNotu(Ton.A4, Delka.Ctvrtina, 2400);
-                    pisen.PridejNotu(Ton.A4, Delka.Ctvrtina, 2800);
+                    pisen.PridejNotu(Ton.A4, Delka.Čtvrtina, 2400);
+                    pisen.PridejNotu(Ton.A4, Delka.Čtvrtina, 2800);
 
                     pisen.PridejNotu(Ton.D4, Delka.Osmina, 3200);
                     pisen.PridejNotu(Ton.E4, Delka.Osmina, 3400);
@@ -87,19 +86,19 @@ namespace Beeper
                     pisen.PridejNotu(Ton.E4, Delka.Osmina, 4200);
                     pisen.PridejNotu(Ton.F4, Delka.Osmina, 4400);
                     pisen.PridejNotu(Ton.D4, Delka.Osmina, 4600);
-                    pisen.PridejNotu(Ton.A4, Delka.Pulka, 4800);
+                    pisen.PridejNotu(Ton.A4, Delka.Půlka, 4800);
 
-                    pisen.PridejNotu(Ton.G4, Delka.Ctvrtina, 6400);
-                    pisen.PridejNotu(Ton.G4, Delka.Ctvrtina, 6800);
-                    pisen.PridejNotu(Ton.Asharp4, Delka.Ctvrtina, 7200);
-                    pisen.PridejNotu(Ton.Asharp4, Delka.Ctvrtina, 7600);
+                    pisen.PridejNotu(Ton.G4, Delka.Čtvrtina, 6400);
+                    pisen.PridejNotu(Ton.G4, Delka.Čtvrtina, 6800);
+                    pisen.PridejNotu(Ton.Asharp4, Delka.Čtvrtina, 7200);
+                    pisen.PridejNotu(Ton.Asharp4, Delka.Čtvrtina, 7600);
                     pisen.Prehraj();
                     break;
                 case "Info":
                     Console.Clear();
                     Console.WriteLine("Vítejte v aplikaci Beeper. Tato aplikace umožňuje vytváření a přehrávání písniček díky System.Beep.");
                     Console.WriteLine("Nová písnička - vytvořte novou písničku.");
-                    Console.WriteLine("Import - nahrajte rozpracovanou melodii ke zpracování");
+                    Console.WriteLine("Nahrát - nahrajte rozpracovanou melodii ke zpracování");
                     Console.WriteLine("Přehrát písničku - přehraje hotovou písničku");
                     Console.WriteLine("");
                     Console.WriteLine("Režim vytváření:");

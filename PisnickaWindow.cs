@@ -12,13 +12,13 @@ namespace Beeper
             int xTotal = 0;
             short xPos = 0;
             short yPos = 0;
-            Delka delka = Delka.Ctvrtina;
+            Delka delka = Delka.Čtvrtina;
             bool krizek = false;
             if (pisen == null) pisen = new PisenInfo();
 
             do
             {
-                VykresliPisnicku(pisen, xPos, yPos, xTotal, krizek);
+                VykresliPisnicku(pisen, xPos, yPos, xTotal, krizek, delka);
                 key = Console.ReadKey();
                 switch (key.Key)
                 {
@@ -73,11 +73,6 @@ namespace Beeper
                     case ConsoleKey.M:
                         Menu.Nabidka(new string[4] { "Rychlost", "Tvůrce", "Název", "Zpět" }, pisen);
                         break;
-                    case ConsoleKey.E:
-                        Console.Clear();
-                        Console.WriteLine("Funkce není implementována");
-                        Console.ReadKey(); //TO DO
-                        break;
                     case ConsoleKey.R:
                         Console.Clear();
                         Console.WriteLine("Opravdu chcete vymazat celou písničku?!?");
@@ -93,10 +88,10 @@ namespace Beeper
             while (key.Key != ConsoleKey.Z);
         }
 
-        private static void VykresliPisnicku(PisenInfo pisen, short x, short y, int totalX, bool krizek)
+        private static void VykresliPisnicku(PisenInfo pisen, short x, short y, int totalX, bool krizek, Delka delka)
         {
             Console.Clear();
-            if (Console.WindowHeight < 42) Console.WindowHeight = 42;
+            if (Console.WindowHeight < 43) Console.WindowHeight = 43;
             if (Console.WindowWidth < 129) Console.WindowWidth = 129;
             Console.WriteLine(" - - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - -"); //E6
             Console.WriteLine("                                |                               |                               |                               ");
@@ -134,9 +129,10 @@ namespace Beeper
             Console.WriteLine("");
             Console.WriteLine("");
             Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("Délka: {0}", delka);
+            Console.WriteLine("");
             Console.WriteLine("[P]řehrát");
             Console.WriteLine("[U]ložit");
-            Console.WriteLine("[E]xport");
             Console.WriteLine("[M]ožnosti");
             Console.WriteLine("[Z]pět");
             Console.WriteLine("[R]eset");

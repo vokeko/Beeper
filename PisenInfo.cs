@@ -7,14 +7,14 @@ namespace Beeper
 {
     public class PisenInfo
     {
-        public int rychlost { private get; set; } //to do - rychlost by měla ovlivňovat BPM písně
+        public int rychlost { private get; set; }
         public string tvurce { private get; set; }
         public string nazev { private get; set; }
         public Dictionary<float, Ton> YNaTon { get; }
         public List<Nota> Noty { get; private set; }
         public PisenInfo()
         {
-            rychlost = 150;
+            rychlost = 100;
             tvurce = "Neznámý";
             nazev = "pisen";
             Noty = new List<Nota>();
@@ -33,14 +33,15 @@ namespace Beeper
             Console.WriteLine("Tvůrce: {0}", tvurce);
             Console.WriteLine("Rychlost: {0}", rychlost);
             Noty = Noty.OrderBy(x => x.Pozice).ToList();
+            float trvani = rychlost / 100F;
             for (int x = 0; x < Noty.Count; x++)
             {
-                Console.Beep(Noty[x].Ton, Noty[x].Delka);
+                Console.Beep(Noty[x].Ton, (int)Math.Floor(Noty[x].Delka / trvani));
                 if (x + 1 < Noty.Count)
                 {
-                    int pauza = Noty[x + 1].Pozice - Noty[x].Pozice - Noty[x].Delka;
+                    var pauza = (Noty[x + 1].Pozice / trvani) - (Noty[x].Pozice / trvani) - (Noty[x].Delka / trvani);
                     if (pauza > 0)
-                        Thread.Sleep(pauza);
+                        Thread.Sleep((int)Math.Floor(pauza));
                 }
             }
         }
