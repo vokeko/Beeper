@@ -89,10 +89,11 @@ namespace Beeper
                 case "Hrát písničku":
                     Console.Clear();
                     Console.WriteLine("Hraje se písnička ♪");
-                    PisenInfo pisen = new PisenInfo() 
+                    PisenInfo pisen = new PisenInfo()
                     {
                         nazev = "Babička Mary",
-                        tvurce = "Jiří Voskovec", 
+                        tvurce = "Jiří Voskovec",
+                        rychlost = 110,
                     };
                     pisen.PridejNotu(Ton.D4, Delka.Čtvrtina, 0);
                     pisen.PridejNotu(Ton.D4, Delka.Čtvrtina, 400);
